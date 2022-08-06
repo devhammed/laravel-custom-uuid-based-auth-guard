@@ -48,6 +48,6 @@ class ApiToken extends Model
      */
     public static function hashString(string $value)
     {
-        return \hash('sha256', $value . '-' . \config('app.key'));
+        return \hash('sha256', ($value . '-' . \config('app.key')));
     }
 }
