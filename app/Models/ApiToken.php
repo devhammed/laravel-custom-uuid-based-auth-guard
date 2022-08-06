@@ -34,4 +34,12 @@ class ApiToken extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * Set hashed value attribute.
+     */
+    public function setValueAttribute(string $value)
+    {
+        $this->attributes['value'] = \hash('sha256', $value);
+    }
 }

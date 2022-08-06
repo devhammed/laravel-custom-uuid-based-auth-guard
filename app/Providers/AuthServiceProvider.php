@@ -40,11 +40,11 @@ class AuthServiceProvider extends ServiceProvider
 
             $tokenType = $authorizationHeaderParts[0];
 
-            $tokenValue = $authorizationHeaderParts[1];
-
             if ($tokenType !== 'Bearer') {
                 return \null;
             }
+
+            $tokenValue = \hash('sha256', $authorizationHeaderParts[1]);
 
             $apiToken = ApiToken::whereValue($tokenValue)->first();
 

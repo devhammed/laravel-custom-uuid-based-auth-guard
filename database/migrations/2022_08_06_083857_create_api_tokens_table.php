@@ -14,7 +14,7 @@ return new class() extends Migration {
     {
         Schema::create('api_tokens', function (Blueprint $table) {
             $table->id();
-            $table->uuid('value')->unique();
+            $table->string('value');
             $table->morphs('user');
             $table->timestamps();
         });

@@ -71,13 +71,15 @@ class AuthController extends Controller
      */
     protected function authResponse(User $user): JsonResponse
     {
-        $token = $user->apiTokens()->create([
-            'value' => Str::orderedUuid(),
+        $uuid = Str::orderedUuid()->toString();
+
+        $user->apiTokens()->create([
+            'value' => $uuid,
         ]);
 
         return $this->ok([
             'user'  => $user,
-            'token' => $token->value,
+            'token' => $uuid,
         ]);
     }
 }
