@@ -44,7 +44,7 @@ class AuthServiceProvider extends ServiceProvider
                 return \null;
             }
 
-            $tokenValue = \hash('sha256', $authorizationHeaderParts[1]);
+            $tokenValue = ApiToken::hashString($authorizationHeaderParts[1]);
 
             $apiToken = ApiToken::whereValue($tokenValue)->first();
 

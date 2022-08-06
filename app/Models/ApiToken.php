@@ -40,6 +40,14 @@ class ApiToken extends Model
      */
     public function setValueAttribute(string $value)
     {
-        $this->attributes['value'] = \hash('sha256', $value);
+        $this->attributes['value'] = static::hashString($value);
+    }
+
+    /**
+     * Generate a hashed token.
+     */
+    public static function hashString(string $value)
+    {
+        return \hash('sha256', $value . '-' . \config('app.key'));
     }
 }
