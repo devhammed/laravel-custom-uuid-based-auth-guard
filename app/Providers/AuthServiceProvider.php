@@ -26,25 +26,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Auth::viaRequest('api-token', function (Request $request) {
-            $authorizationHeader = $request->header('Authorization');
+            $authorizationToken = $request->bearerToken() ?? $request->query('api-token');
 
-            if (!\is_string($authorizationHeader) || empty($authorizationHeader)) {
+            if (!\is_string($authorizationToken)) {
                 return \null;
             }
 
-            $authorizationHeaderParts = \explode(' ', $authorizationHeader);
-
-            if (\count($authorizationHeaderParts) !== 2) {
-                return \null;
-            }
-
-            $tokenType = $authorizationHeaderParts[0];
-
-            if ($tokenType !== 'Bearer') {
-                return \null;
-            }
-
-            $tokenValue = ApiToken::hashString($authorizationHeaderParts[1]);
+            $tokenValue = ApiToken::hashString($authorizationToken);
 
             $apiToken = ApiToken::whereValue($tokenValue)->first();
 
