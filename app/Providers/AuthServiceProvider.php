@@ -26,7 +26,9 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Auth::viaRequest('api-token', function (Request $request) {
-            $authorizationToken = $request->bearerToken() ?? $request->query('api-token');
+            $apiTokenQueryKey = \config('auth.api_token_query_key', 'api-token');
+
+            $authorizationToken = $request->bearerToken() ?? $request->query($apiTokenQueryKey);
 
             if (!\is_string($authorizationToken)) {
                 return \null;
@@ -40,7 +42,9 @@ class AuthServiceProvider extends ServiceProvider
                 return \null;
             }
 
-            if (\now()->diffInSeconds($apiToken->created_at) >= \config('auth.api_token_timeout')) {
+            $apiTokenTimeout = \config('auth.api_token_timeout', 3600); // in seconds
+
+            if (\now()->diffInSeconds($apiToken->created_at) >= $apiTokenTimeout) {
                 $apiToken->delete();
 
                 return \null;
